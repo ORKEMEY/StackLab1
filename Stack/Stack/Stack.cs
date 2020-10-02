@@ -97,7 +97,18 @@ namespace Stack
 
 		public void Dispose()
 		{
+			/*Item<T> curDis, cur = _CapacityHead;
+
+			while(cur != null)
+			{
+				curDis = cur;
+				cur = cur.Prev;
+				curDis.Dispose();
+				curDis = null;
+			}*/
+
 		}
+
 		public IEnumerator<T> GetEnumerator()
 		{
 			Reset();

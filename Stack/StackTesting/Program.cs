@@ -10,8 +10,10 @@ namespace StackTesting
 		static void Main(string[] args)
 		{
 
-			//System.Collections.Generic.Stack<int> arr = new System.Collections.Generic.Stack<int>();
+			//System.Collections.Generic.Stack<int> stack = new System.Collections.Generic.Stack<int>();
 			Stack<int> stack = new Stack<int>(2);
+
+
 
 			stack.Push(1);
 			stack.Push(2);
@@ -34,7 +36,7 @@ namespace StackTesting
 			Console.WriteLine(stack.ToString());
 			//============================================
 			Console.WriteLine();
-			Console.WriteLine(" Stack cantains 6: " + stack.Contains(6));
+			Console.WriteLine("Stack cantains 6: " + stack.Contains(6));
 
 			//============================================
 			int[] arr = new int[stack.Count];
@@ -51,12 +53,15 @@ namespace StackTesting
 			Console.WriteLine(stack2.ToString());
 
 			//============================================
+
+			stack2.StackCleared += () => Console.WriteLine("\nStack2 was cleared");
+
 			stack2.Clear();
 			Console.WriteLine("\nCleared stack: ");
 			Console.WriteLine(stack2.ToString());
 
-
 			Console.Read();
 		}
+
 	}
 }

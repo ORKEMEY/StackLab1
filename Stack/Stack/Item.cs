@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Stack
 {
-	internal class Item<T>
+	internal class Item<T> : IDisposable
 	{
 		private int _Index { get; set; }
 		public int Index
@@ -40,6 +40,14 @@ namespace Stack
 			Prev = head;
 			IsFilled = true;
 			Index = 0;
+		}
+
+		public void Dispose()
+		{
+			Object = default;
+			Prev = null;
+			IsFilled = default;
+			_Index = default;
 		}
 
 	}
