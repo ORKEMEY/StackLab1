@@ -4,13 +4,13 @@ using System.Collections;
 
 namespace Stack
 {
-	public class Stack<T> : IEnumerable<T>, IEnumerator<T>, ICloneable
+	public class Stack<T> : IEnumerable<T>, IEnumerator<T>, ICloneable, ICollection
 	{
 		private Item<T> _Head;
 		public T Head
 		{
 			get
-			{		
+			{
 				if (_Head == null || _Head.IsFilled == false) throw new StackException(StackException.ReferringToEmptyStack);
 				return _Head.Object;
 			}
@@ -37,6 +37,10 @@ namespace Stack
 			}
 		}
 		private int position { get; set; }
+
+		public bool IsSynchronized => false;
+
+		public object SyncRoot => new object();
 
 		public delegate void ItemPushedDelegate(object item);
 		public event ItemPushedDelegate ItemPushed;
@@ -245,14 +249,14 @@ namespace Stack
 			StackCloned?.Invoke();
 			return stackCopy;
 		}
-		public void CopyTo(T[] arr, int beginIndex = 0)
+		public void CopyTo(Array array, int beginIndex = 0)
 		{
 			if (_Head == null || _Head.IsFilled == false) throw new StackException(StackException.ReferringToEmptyStack);
 			if (beginIndex >= this.Count || beginIndex < 0) throw new StackException(StackException.IndexOutOfRange);
-
+		
 			for (int count = beginIndex; count < Count; count++)
 			{
-				arr[count - beginIndex] = this[count];
+				array.SetValue(this[count], count - beginIndex);
 			}
 		}
 	}

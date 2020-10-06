@@ -13,8 +13,6 @@ namespace StackTesting
 			//System.Collections.Generic.Stack<int> stack = new System.Collections.Generic.Stack<int>();
 			Stack<int> stack = new Stack<int>(2);
 
-
-
 			stack.Push(1);
 			stack.Push(2);
 			stack.Push(3);
