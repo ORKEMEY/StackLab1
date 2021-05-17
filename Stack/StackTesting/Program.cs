@@ -1,5 +1,6 @@
 ﻿using System;
 using Stack;
+//using System.Collections;
 //using System.Collections.Generic;
 
 
@@ -11,6 +12,8 @@ namespace StackTesting
 		{
 
 			//System.Collections.Generic.Stack<int> stack = new System.Collections.Generic.Stack<int>();
+
+
 			Stack<int> stack = new Stack<int>(2);
 
 			stack.Push(1);
@@ -52,7 +55,7 @@ namespace StackTesting
 
 			//============================================
 
-			stack2.StackCleared += () => Console.WriteLine("\nStack2 was cleared");
+			stack2.StackCleared += (object st) => Console.WriteLine("\nStack2 was cleared");
 
 			stack2.Clear();
 			Console.WriteLine("\nCleared stack: ");

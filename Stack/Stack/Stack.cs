@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections;
 
+
 namespace Stack
 {
 	public class Stack<T> : IEnumerable<T>, IEnumerator<T>, ICloneable, ICollection
@@ -42,16 +43,16 @@ namespace Stack
 
 		public object SyncRoot => new object();
 
-		public delegate void ItemPushedDelegate(object item);
+		public delegate void ItemPushedDelegate(object sender, T item, int idex);
 		public event ItemPushedDelegate ItemPushed;
 
-		public delegate void ItemPopedDelegate(object item);
+		public delegate void ItemPopedDelegate(object sender, T item, int idex);
 		public event ItemPopedDelegate ItemPoped;
 
-		public delegate void StackClearedDelegate();
+		public delegate void StackClearedDelegate(object sender);
 		public event StackClearedDelegate StackCleared;
 
-		public delegate void StackClonedDelegate();
+		public delegate void StackClonedDelegate(object sender, Stack<T> stackCopy);
 		public event StackClonedDelegate StackCloned;
 
 		private T this[int ind]
@@ -93,7 +94,7 @@ namespace Stack
 			string str = "";
 			foreach (T i in this)
 			{
-				str += i.ToString() + ", ";
+				str += i?.ToString() + ", ";
 			}
 
 			return str;
@@ -163,7 +164,6 @@ namespace Stack
 			}
 			return cur;
 		}
-
 		private Item<T> GetNextEmptyItem()
 		{
 			if (_CapacityHead == _Head) return null;
@@ -191,16 +191,14 @@ namespace Stack
 			{
 				_CapacityHead = _Head = new Item<T>(_Head, newObj);
 			}
-			ItemPushed?.Invoke(newObj);
+			ItemPushed?.Invoke(this, newObj, _Head.Index);
 		}
-		public T Pop()
+		public void Pop()
 		{
 			if(_Head == null) throw new StackException(StackException.ReferringToEmptyStack);
 			_Head.IsFilled = false;
-			ItemPoped?.Invoke(_Head.Object);
+			ItemPoped?.Invoke(this, _Head.Object, _Head.Index);
 			_Head = _Head.Prev;
-			if (_Head == null) return default;
-			return Head;
 		}
 		public T Peek()
 		{
@@ -213,7 +211,7 @@ namespace Stack
 			{
 				Pop();
 			}
-			StackCleared?.Invoke();
+			StackCleared?.Invoke(this);
 		}
 		public bool Contains(T itemToFind)
 		{
@@ -226,6 +224,15 @@ namespace Stack
 			}
 			return false;
 			
+		}
+		public bool Contains(T itemToFind, IEqualityComparer<T> comparer)
+		{
+			foreach (T item in this)
+			{
+				if (comparer.Equals(item, itemToFind))
+					return true;
+			}
+			return false;
 		}
 		public T[] ToArray()
 		{
@@ -246,9 +253,10 @@ namespace Stack
 			{
 				stackCopy.Push(this[count]);
 			}
-			StackCloned?.Invoke();
+			StackCloned?.Invoke(this, stackCopy);
 			return stackCopy;
 		}
+
 		public void CopyTo(Array array, int beginIndex = 0)
 		{
 			if (_Head == null || _Head.IsFilled == false) throw new StackException(StackException.ReferringToEmptyStack);
